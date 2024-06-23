@@ -43,22 +43,7 @@
 #include <unistd.h>
 #endif
 
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
-#include "SDL/SDL.h"
+#include "SDL2/SDL.h"
 
 #include "m_argv.h"
 #include "doomstat.h"
@@ -92,6 +77,7 @@ int use_doublebuffer = 1; // Included not to break m_misc, but not relevant to S
 int use_fullscreen;
 int desired_fullscreen;
 static SDL_Surface *screen;
+static SDL_Window *window;
 
 ////////////////////////////////////////////////////////////////////////////
 // Input code
@@ -381,11 +367,11 @@ void I_FinishUpdate (void)
 {
   if (I_SkipFrame()) return;
 
-#ifdef MONITOR_VISIBILITY
-  if (!(SDL_GetAppState()&SDL_APPACTIVE)) {
-    return;
-  }
-#endif
+//#ifdef MONITOR_VISIBILITY
+//  if (!(SDL_GetAppState()&SDL_APPACTIVE)) {
+//    return;
+//  }
+//#endif
 
 #ifdef GL_DOOM
   if (V_GetMode() == VID_MODEGL) {
@@ -463,13 +449,13 @@ static void I_ShutdownSDL(void)
 void I_PreInitGraphics(void)
 {
   // Initialize SDL
-  unsigned int flags = 0;
-  if (!(M_CheckParm("-nodraw") && M_CheckParm("-nosound")))
-    flags = SDL_INIT_VIDEO;
-#ifdef _DEBUG
-  flags |= SDL_INIT_NOPARACHUTE;
-#endif
-  if ( SDL_Init(flags) < 0 ) {
+  //unsigned int flags = 0;
+  //if (!(M_CheckParm("-nodraw") && M_CheckParm("-nosound")))
+  //  flags = SDL_INIT_VIDEO;
+//#ifdef _DEBUG
+  //flags |= SDL_INIT_NOPARACHUTE;
+//#endif
+  if ( SDL_Init(SDL_INIT_EVERYTHING) < 0 ) {
     I_Error("Could not initialize SDL [%s]", SDL_GetError());
   }
 
@@ -482,7 +468,7 @@ void I_PreInitGraphics(void)
 // It should be used only for fullscreen modes.
 static void I_ClosestResolution (int *width, int *height, int flags)
 {
-  SDL_Rect **modes;
+  /*SDL_Rect **modes;
   int twidth, theight;
   int cwidth = 0, cheight = 0;
 //  int iteration;
@@ -490,7 +476,7 @@ static void I_ClosestResolution (int *width, int *height, int flags)
   unsigned int closest = UINT_MAX;
   unsigned int dist;
 
-  modes = SDL_ListModes(NULL, flags);
+  modes = SDL_ListModes(NULL, SDL_INIT_EVERYTHING);
 
   //for (iteration = 0; iteration < 2; iteration++)
   {
@@ -524,7 +510,8 @@ static void I_ClosestResolution (int *width, int *height, int flags)
       *height = cheight;
       return;
     }
-  }
+  }*/
+  return;
 }  
 
 // CPhipps -
@@ -603,11 +590,11 @@ void I_InitGraphics(void)
     /* Set the video mode */
     I_UpdateVideoMode();
 
-    /* Setup the window title */
+    /* Setup the window title and create the window*/
     strcpy(titlebuffer,PACKAGE);
     strcat(titlebuffer," ");
     strcat(titlebuffer,VERSION);
-    SDL_WM_SetCaption(titlebuffer, titlebuffer);
+    window = SDL_CreateWindow(&titlebuffer, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_SHOWN | (desired_fullscreen ? SDL_WINDOW_FULLSCREEN);
 
     /* Initialize the input system */
     I_InitInputs();
@@ -641,7 +628,7 @@ void I_UpdateVideoMode(void)
   I_SetRes();
 
   // Initialize SDL with this graphics mode
-  if (V_GetMode() == VID_MODEGL) {
+  /*if (V_GetMode() == VID_MODEGL) {
     init_flags = SDL_OPENGL;
   } else {
     if (use_doublebuffer)
@@ -650,13 +637,13 @@ void I_UpdateVideoMode(void)
       init_flags = SDL_SWSURFACE;
 #ifndef _DEBUG
     init_flags |= SDL_HWPALETTE;
-#endif
+#endif*/
   }
 
-  init_flags = SDL_DOUBLEBUF;
+  //init_flags = SDL_DOUBLEBUF;
 
   if ( desired_fullscreen )
-    init_flags |= SDL_FULLSCREEN;
+    //init_flags |= SDL_FULLSCREEN;
 
   if (V_GetMode() == VID_MODEGL) {
     SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 0 );

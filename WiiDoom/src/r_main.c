@@ -52,7 +52,8 @@
 #include "g_game.h"
 #include "r_demo.h"
 #include "r_fps.h"
-#include "SDL/SDL.h"
+#include "<SDL2/SDL.h"
+#include "<SDL2/SDL.h"
 
 // Fineangles in the SCREENWIDTH wide window.
 #define FIELDOFVIEW 2048

@@ -90,12 +90,9 @@
 
 //#include <wiiuse/wpad.h>
 #include <ogc/pad.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL.h>
-#include <SDL/SDL_ttf.h>
-#include <SDL/SDL_ttf.h>
-#include <SDL/SDL_image.h>
-#include <SDL/SDL_image.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 #include <ogcsys.h>
 #include <gccore.h>
 #include <sys/dir.h>
@@ -1782,6 +1779,7 @@ void WADPicker()
 	int i;
 	int selectedPWADs[MAX_PWADS];
 	int selectedPWADIndex;
+	SDL_Window *window = SDL_CreateWindow("GCDoom", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
 	SDL_Event Event;
 	for (selectedPWADIndex = 0; selectedPWADIndex < MAX_PWADS; selectedPWADIndex++)
 		selectedPWADs[selectedPWADIndex] = -1;
