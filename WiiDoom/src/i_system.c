@@ -51,6 +51,21 @@
 #include <sys/stat.h>
 
 #include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
 
 #ifdef HAVE_CONFIG_H
 #include "config.h"
@@ -283,24 +298,24 @@ char* I_FindFile(const char* wfname, const char* ext)
     	//Determine SD or USB
     FILE * fp2;
     bool sd = false;
-	bool usb = false;
-    fp2 = fopen("sd:/apps/wiidoom/data/prboom.wad", "rb");
+	//bool usb = false;
+    fp2 = fopen("sdb:/gcdoom/data/prboom.wad", "rb");
     if(fp2)
     sd = true;
-    if(!fp2){
-    fp2 = fopen("usb:/apps/wiidoom/data/prboom.wad", "rb");
-    }
-    if(fp2 && !sd)
-    usb = true;
+    //if(!fp2){
+    //fp2 = fopen("usb:/apps/wiidoom/data/prboom.wad", "rb");
+    //}
+    //if(fp2 && !sd)
+    //usb = true;
 	
 	if(fp2);
 	fclose(fp2);
 
 	char *p;
 	if(sd)
-	p = "sd:/apps/wiidoom/data/";
-	if(usb)
-	p = "usb:/apps/wiidoom/data/";
+	p = "sdb:/apps/wiidoom/data/";
+	//if(usb)
+	//p = "usb:/apps/wiidoom/data/";
 	
 	char *f;
 	f = malloc(strlen(p) + strlen(wfname) + 4);

@@ -44,11 +44,101 @@
 #endif
 
 #include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
+#include "SDL/SDL_audio.h"
 #include "SDL/SDL_audio.h"
 #include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_mutex.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
+#include "SDL/SDL_byteorder.h"
 #include "SDL/SDL_byteorder.h"
 #include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
+#include "SDL/SDL_version.h"
 #ifdef HAVE_MIXER
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
 #include "SDL/SDL_mixer.h"
 #endif
 
@@ -70,7 +160,7 @@
 
 
 extern bool sd;
-extern bool usb;
+// extern bool usb;
 // The number of internal mixing channels,
 //  the samples calculated for each mixing step,
 //  the size of the 16bit, 2 hardware channel (stereo)
@@ -576,6 +666,21 @@ void I_InitSound(void)
 
 #ifdef HAVE_MIXER
 #include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
+#include "SDL/SDL_mixer.h"
 #include "mmus2mid.h"
 
 static Mix_Music *music[2] = { NULL, NULL };
@@ -601,10 +706,10 @@ void I_InitMusic(void)
 #ifdef HAVE_MIXER
   if (!music_tmp) {
 #ifndef _WIN32
-	if(sd)
-    music_tmp = strdup("sd:/apps/wiidoom/data/music/prboom-music-XXXXXX");
-	if(usb)
-	music_tmp = strdup("usb:/apps/wiidoom/data/music/prboom-music-XXXXXX");
+	//if(sd)
+    music_tmp = strdup("sdb:/gcdoom/data/music/prboom-music-XXXXXX");
+	//if(usb)
+	//music_tmp = strdup("usb:/apps/wiidoom/data/music/prboom-music-XXXXXX");
     {
       int fd = mkstemp(music_tmp);
       if (fd<0) {

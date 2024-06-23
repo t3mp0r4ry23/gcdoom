@@ -91,7 +91,8 @@
 #include "r_demo.h"
 #include "r_fps.h"
 
-#include <wiiuse/wpad.h>
+//#include <wiiuse/wpad.h>
+#include <ogc/pad.h>
 
 #define SAVEGAMESIZE  0x20000
 #define SAVESTRINGSIZE  24
@@ -246,8 +247,8 @@ static int   dclicks2;
 // joystick values are repeated
 static int   joyxmove;
 static int   joyymove;
-static int   joyirx;
-static int   joyiry;
+/*static int   joyirx;
+static int   joyiry;*/
 static bool joyarray[13]; // added elements for for wii remote and nunchuck buttons
 static bool *joybuttons = &joyarray[1];    // allow [-1]
 
@@ -355,10 +356,10 @@ void G_BuildTiccmd(ticcmd_t* cmd)
         side -= sidemove[speed];
       if (joyxmove < 0)
         cmd->angleturn += angleturn[tspeed];
-      if (joyirx > 0)     // calculate wii IR curve based on input
+      /*if (joyirx > 0)     // calculate wii IR curve based on input
         cmd->angleturn -= 5.0f * joyirx;
       if (joyirx < 0)     // calculate wii IR curve based on input
-        cmd->angleturn -= 5.0f * joyirx;
+        cmd->angleturn -= 5.0f * joyirx;*/
     }
   else
     {
@@ -368,10 +369,10 @@ void G_BuildTiccmd(ticcmd_t* cmd)
         cmd->angleturn += angleturn[tspeed];
       if (joyxmove != 0)
         side += joyxmove;
-      if (joyirx > 0)     // calculate wii IR curve based on input (max speed ~2560)
+      /*if (joyirx > 0)     // calculate wii IR curve based on input (max speed ~2560)
         cmd->angleturn -= 5.0f * joyirx;
       if (joyirx < 0)     // calculate wii IR curve based on input
-        cmd->angleturn -= 5.0f * joyirx;
+        cmd->angleturn -= 5.0f * joyirx;*/
     }
 
   if (gamekeydown[key_up])
@@ -696,7 +697,7 @@ static void G_DoLoadLevel (void)
 
   // clear cmd building stuff
   memset (gamekeydown, 0, sizeof(gamekeydown));
-  joyxmove = joyymove = joyirx = joyiry = 0;
+  joyxmove = joyymove /*= joyirx = joyiry*/ = 0;
   mousex = mousey = 0;
   special_event = 0; paused = false;
   memset (mousebuttons, 0, sizeof(mousebuttons));
@@ -840,8 +841,8 @@ bool G_Responder (event_t* ev)
       joybuttons[12] = (ev->data1 & 4096) > 0;
       joyxmove = ev->data2;
       joyymove = ev->data3;
-      joyirx = ev->data4;
-      joyiry = ev->data5;
+      // joyirx = ev->data4;
+      // joyiry = ev->data5;
       return true;    // eat events
 
     default:

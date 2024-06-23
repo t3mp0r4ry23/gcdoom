@@ -64,7 +64,8 @@
 #include "i_sound.h"
 #include "r_demo.h"
 #include "r_fps.h"
-#include <wiiuse/wpad.h>
+//#include <wiiuse/wpad.h>
+#include <ogc/pad.h>
 
 extern patchnum_t hu_font[HU_FONTSIZE];
 extern bool  message_dontfuckwithme;
@@ -4133,8 +4134,8 @@ bool M_Responder (event_t* ev) {
   // For some reason, polling ev.data for joystick input here in the menu code doesn't work when
   // using the twilight hack to launch wiidoom. At the same time, it works fine if you're using the
   // homebrew channel. I don't know why this is so for the meantime I'm polling the wii remote directly.
-
-  WPADData *data = WPAD_Data(0);
+  
+  /*WPADData *data = WPAD_Data(0);
     if (chosenController == 0)
 	{
     if ((data->btns_h & WPAD_BUTTON_UP) && (joywait < I_GetTime()))
@@ -4272,7 +4273,7 @@ bool M_Responder (event_t* ev) {
       }
 	 }
 	 //End Nunchuk controls
-	
+	*/
     //GC Controls 
 	if(chosenController == 1){		
     if ((GCButtonsDown & PAD_BUTTON_UP) && (joywait < I_GetTime()))

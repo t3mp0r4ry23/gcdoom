@@ -62,7 +62,7 @@ int cons_output_mask = -1;        /* all output enabled */
  */
 #define MAX_MESSAGE_SIZE 2048
 extern bool sd;
-extern bool usb;
+//extern bool usb;
 #ifdef _WIN32
 // Variables for the console
 HWND con_hWnd=0;
@@ -338,10 +338,10 @@ int lprintf(OutputLevels pri, const char *s, ...)
   vsprintf(msg,s,v);
 #endif
   va_end(v);
-  if(sd)
-  fp = fopen("sd:/apps/wiidoom/data/output.txt", "a");
-  if(usb)
-  fp = fopen("usb:/apps/wiidoom/data/output.txt", "a");
+  //if(sd)
+  fp = fopen("sd:/gcdoom/data/output.txt", "a");
+  //if(usb)
+  //fp = fopen("usb:/apps/wiidoom/data/output.txt", "a");
   if (lvl&cons_output_mask)               /* mask output as specified */
   {
     //r=fprintf(stdout,"%s",msg);

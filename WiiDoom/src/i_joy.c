@@ -38,6 +38,7 @@
 #include <stdlib.h>
 
 #include <SDL/SDL.h>
+#include <SDL/SDL.h>
 #include "doomdef.h"
 #include "doomtype.h"
 #include "m_argv.h"
@@ -46,7 +47,8 @@
 #include "i_joy.h"
 #include "lprintf.h"
 
-#include <wiiuse/wpad.h>
+//#include <wiiuse/wpad.h>
+#include <ogc/pad.h>
 #include <math.h>
 
 #define PI 3.14159265
@@ -77,10 +79,10 @@ static void I_EndJoystick(void)
 void I_PollJoystick(void)
 {
   PAD_ScanPads();
-  WPAD_ScanPads();
-  WPADData *data = WPAD_Data(0);
-  ir_t ir;
-  WPAD_IR(0, &ir);
+  //WPAD_ScanPads();
+  //WPADData *data = WPAD_Data(0);
+  //ir_t ir;
+  //WPAD_IR(0, &ir);
   int nun_x, nun_y, center, min, max, btn_a, btn_b, btn_c, btn_z, btn_1, btn_2, btn_l, btn_r, btn_d, btn_u, btn_p, btn_m, btn_h;
   int btn_lastwep, firstwep;
   int i;
@@ -103,11 +105,11 @@ void I_PollJoystick(void)
 
   if (chosenController == -1)
   {
-	if (data->btns_h & WPAD_BUTTON_HOME)
-		chosenController = 0;
-	else if (data->btns_h & WPAD_CLASSIC_BUTTON_HOME && data->exp.type == WPAD_EXP_CLASSIC)
-		chosenController = 0;
-	else for (i = 0; i < 4; i++)
+	//if (data->btns_h & WPAD_BUTTON_HOME)
+	//	chosenController = 0;
+	//else if (data->btns_h & WPAD_CLASSIC_BUTTON_HOME && data->exp.type == WPAD_EXP_CLASSIC)
+	//	chosenController = 0;
+	for (i = 0; i < 4; i++)
 	{
 		if (PAD_ButtonsHeld(i) & PAD_BUTTON_START)
 		{
@@ -118,7 +120,8 @@ void I_PollJoystick(void)
 	return;
   }
    //Wiimote + Nunchuk controls
-  if(chosenController == 0 && data->exp.type == WPAD_EXP_NUNCHUK){
+   //lol. lmao even
+  /*if(chosenController == 0 && data->exp.type == WPAD_EXP_NUNCHUK){
   nun_x = data->exp.nunchuk.js.pos.x;
   nun_y = data->exp.nunchuk.js.pos.y;
 
@@ -308,9 +311,9 @@ void I_PollJoystick(void)
   
   }
   //End Classic Controller
-  
+  */
   //Gamecube controller
-  else if(chosenController == 1){
+  if(chosenController == 1){
   GCButtonsDown = PAD_ButtonsHeld(controlNum);
   pad_stickx = PAD_StickX(controlNum);
   pad_sticky = PAD_StickY(controlNum);
@@ -387,8 +390,8 @@ void I_PollJoystick(void)
   else//No stick Y movement
     axis_y = 0;
     
-  ev.data4 = axis_x;
-  ev.data5 = axis_y;
+  //ev.data4 = axis_x;
+  //ev.data5 = axis_y;
   
   }
   ev.data1 =

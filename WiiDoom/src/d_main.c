@@ -88,16 +88,20 @@
 #include "lprintf.h"  // jff 08/03/98 - declaration of lprintf
 #include "am_map.h"
 
-#include <wiiuse/wpad.h>
+//#include <wiiuse/wpad.h>
+#include <ogc/pad.h>
+#include <SDL/SDL.h>
 #include <SDL/SDL.h>
 #include <SDL/SDL_ttf.h>
+#include <SDL/SDL_ttf.h>
+#include <SDL/SDL_image.h>
 #include <SDL/SDL_image.h>
 #include <ogcsys.h>
 #include <gccore.h>
 #include <sys/dir.h>
-#include <sdcard/wiisd_io.h>
+#include <sdcard/gcsd.h>
 #include <fat.h>
-#include <wiikeyboard/keyboard.h>
+//#include <wiikeyboard/keyboard.h>
 #include <ogc/usbmouse.h>
 #define D_LEFT 0
 #define D_RIGHT 1
@@ -150,9 +154,12 @@ char    baseiwad[PATH_MAX+1];      // jff 3/23/98: iwad directory
 char    basesavegame[PATH_MAX+1];  // killough 2/16/98: savegame directory
 
 // Wii ir variables
+//ir is for nerds who aren't using a gamecube
+/*
 static int   joyirx;
 static int   joyiry;
 int ir_crosshair;
+*/
 #define MAX_PWADS 50
 char *selectedIWADFile;
 char selectedPWADFiles[MAX_PWADS][80];
@@ -164,9 +171,9 @@ char path[80];
 s8 HWButton = -1;
 char foundPwads[MAX_PWADS][80];
 bool sd;
-bool usb;
+//bool usb;
 
-void WiiResetPressed()
+/* void WiiResetPressed()
 {
 	HWButton = 0;
 }
@@ -178,6 +185,7 @@ void WiimotePowerPressed(s32 chan)
 {
 	HWButton = SYS_POWEROFF_STANDBY;
 }
+*/
 //jff 4/19/98 list of standard IWAD names
 const char *const standard_iwads[]=
 {
@@ -216,8 +224,8 @@ void D_PostEvent(event_t *ev)
 		G_Responder(ev);
 
 	// Set wii ir variables
-	joyirx = ev->data4 + 160;
-	joyiry = ev->data5 + 110;
+	//joyirx = ev->data4 + 160;
+	//joyiry = ev->data5 + 110;
 }
 
 //
@@ -346,10 +354,11 @@ void D_Display (void)
 			R_DrawViewBorder();
 
 		// Draw wii ir
-		if (ir_crosshair == 1)
+		/* if (ir_crosshair == 1)
 			if (gamestate == GS_LEVEL && (!(automapmode & am_active)))
 				if (joyirx > 0 && joyirx < 320 && joyiry > 0 && joyiry < 210)
 					V_DrawNamePatch(joyirx, joyiry, 0, "STCFN088", CR_DEFAULT, VPT_NONE); // TEST IR INDICATOR
+					*/
 		HU_Drawer();
 	}
 
@@ -369,6 +378,19 @@ void D_Display (void)
 #ifdef HAVE_NET
 	NetUpdate();         // send out any new accumulation
 #else
+	void D_BuildNewTiccmds()
+	{
+	    static int lastmadetic;
+	    int newtics = I_GetTime() - lastmadetic;
+	    lastmadetic += newtics;
+	    while (newtics--)
+	    {
+	      I_StartTic();
+	      if (maketic - gametic > BACKUPTICS/2) break;
+	      G_BuildTiccmd(netcmds[maketic%BACKUPTICS]);
+	      maketic++;
+	    }
+	}
 	D_BuildNewTiccmds();
 #endif
 
@@ -840,10 +862,10 @@ static void IdentifyVersion (void)
 	char tempPath[80];
 	// set save path to -save parm or current dir
 	char tempIWADName[80];
-	if (usb)
-		mkdir("usb:/apps/wiidoom/data/saves",0);
-	else if (sd)
-		mkdir("sd:/apps/wiidoom/data/saves",0);
+	//if (usb)
+	//	mkdir("usb:/apps/wiidoom/data/saves",0);
+	//else if (sd)
+	mkdir("sdb:/gcdoom/data/saves",0);
 	int ii = 0;
 	for (i = strlen(selectedIWADFile); i >= 0 ; i--)
 	{
@@ -858,10 +880,10 @@ static void IdentifyVersion (void)
 			break;
 		}
 	}
-	if (sd)
-		sprintf(tempPath,"sd:/apps/wiidoom/data/saves/%s",tempIWADName);
-	else if (usb)
-		sprintf(tempPath,"usb:/apps/wiidoom/data/saves/%s",tempIWADName);
+	//if (sd)
+	sprintf(tempPath,"sdb:/apps/wiidoom/data/saves/%s",tempIWADName);
+	//else if (usb)
+	//	sprintf(tempPath,"usb:/apps/wiidoom/data/saves/%s",tempIWADName);
 	mkdir(tempPath,0);
 	strcpy(basesavegame,tempPath);
 	lprintf(LO_DEBUG,"\r\nSavegame path: %s\r\n",basesavegame);
@@ -1307,8 +1329,8 @@ static void D_DoomMainSetup(void)
 		}
 
 		/* cphipps - the main display. This shows the build date, copyright, and game type */
-		lprintf(LO_ALWAYS,"WiiDoom (built %s), playing: %s\n"
-			"WiiDoom is released under the GNU General Public license v2.0.\n"
+		lprintf(LO_ALWAYS,"GCDoom (built %s), playing: %s\n"
+			"GCDoom is released under the GNU General Public license v2.0.\n"
 			"You are welcome to redistribute it under certain conditions.\n"
 			"It comes with ABSOLUTELY NO WARRANTY. See the file COPYING for details.\n",
 			version_date, doomverstr);
@@ -1770,16 +1792,16 @@ void WADPicker()
 	TTF_Font *doomfnt24;
 	TTF_Font *doomfnt18;
 	SDL_ShowCursor(SDL_DISABLE);
-	if (sd)
-	{
-		doomfnt24 = TTF_OpenFont("sd:/apps/wiidoom/data/fonts/DooM.ttf", 24 );
-		doomfnt18 = TTF_OpenFont("sd:/apps/wiidoom/data/fonts/DooM.ttf", 18 );
-	}
-	else if (usb)
+	//if (sd)
+	//{
+	doomfnt24 = TTF_OpenFont("sdb:/gcdoom/data/fonts/DooM.ttf", 24 );
+	doomfnt18 = TTF_OpenFont("sdb:/gcdoom/data/fonts/DooM.ttf", 18 );
+	//}
+	/*else if (usb)
 	{
 		doomfnt24 = TTF_OpenFont("usb:/apps/wiidoom/data/fonts/DooM.ttf",24);
 		doomfnt18 = TTF_OpenFont("usb:/apps/wiidoom/data/fonts/DooM.ttf",18);
-	}
+	}*/
 	SDL_Color clrFg = {0,0,255};
 	SDL_Color clrFgSelected = {255,0,0};
 	SDL_Color clrStartText = {255,255,255};
@@ -1787,10 +1809,10 @@ void WADPicker()
 	SDL_Color clrFgLit = {238,250,0};
 	SDL_Surface *logo;
 	// Load logo
-	if(sd)
-		logo = IMG_Load("sd:/apps/wiidoom/data/images/doom.bmp");
-	else if(usb)
-		logo = IMG_Load("usb:/apps/wiidoom/data/images/doom.bmp");
+	//if(sd)
+	logo = IMG_Load("sdb:/gcdoom/data/images/doom.bmp");
+	//else if(usb)
+	//logo = IMG_Load("usb:/apps/wiidoom/data/images/doom.bmp");
 
 
 	SDL_Rect rlogo = {LOGOX, LOGOY, 0, 0}; 
@@ -1838,15 +1860,15 @@ void WADPicker()
 	int menuSelected = 0;
 	int PWADMenu = -1;
 	struct stat st;
-	char filename[MAXPATHLEN]; // always guaranteed to be enough to hold a filename
+	char filename[MAXNAMLEN]; // always guaranteed to be enough to hold a filename
 	DIR* dir = NULL;
 	struct dirent* dirent = NULL;
 	int len = 0;
 	i=0;
-	if(sd)
-		dir = opendir ("sd:/apps/wiidoom/data/pwads");
-	else if(usb)
-		dir = opendir ("usb:/apps/wiidoom/data/pwads");
+	//if(sd)
+	dir = opendir ("sdb:/apps/wiidoom/data/pwads");
+	//else if(usb)
+	//	dir = opendir ("usb:/apps/wiidoom/data/pwads");
 
 
 	if (dir != NULL)
@@ -1882,7 +1904,7 @@ void WADPicker()
 	int ax = 320;
 	int ay = 240;
 	int input = -1;
-	ir_t ir;
+	//ir_t ir;
 	while (!done)
 	{
 		input = -1;
@@ -1939,7 +1961,7 @@ void WADPicker()
 				S_StartSound(NULL, sfx_swtchn);
 				exit(0);
 				SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
-				SDL_FlipSurface(screen);
+				//SDL_BlitSurface(screen);
 			default:
 				break;
 			}
@@ -1951,9 +1973,9 @@ void WADPicker()
 		s32 pad_sticky = PAD_StickY(0);
 
 		// Get Wiimote data
-		WPAD_ScanPads();
-		u32 wpaddown = WPAD_ButtonsDown(0);
-		WPADData *data = WPAD_Data(0);
+		//WPAD_ScanPads();
+		//u32 wpaddown = WPAD_ButtonsDown(0);
+		//WPADData *data = WPAD_Data(0);
 		/*if (!useMouse)
 		{
 			WPAD_IR(0, &ir);
@@ -2060,47 +2082,48 @@ void WADPicker()
 		}
 
 		// Draw IR cursor
-		SDL_Rect rcDest = {ax,ay, 0,0};
+		/*SDL_Rect rcDest = {ax,ay, 0,0};
 		SDL_BlitSurface(sCursor,NULL,screen,&rcDest );
 		u32 exp_type;
 		WPAD_Probe(0, &exp_type);
-		if ((wpaddown & WPAD_BUTTON_A || PAD_ButtonsDown(0)&PAD_BUTTON_A) || (wpaddown & WPAD_CLASSIC_BUTTON_A && exp_type == WPAD_EXP_CLASSIC))
+		*/
+		if (PAD_ButtonsDown(0)&PAD_BUTTON_A)
 		{
 			input = D_SELECT;
 		}
-		else if ((wpaddown & WPAD_BUTTON_UP || PAD_ButtonsDown(0)&PAD_BUTTON_UP) || (wpaddown & WPAD_CLASSIC_BUTTON_UP && exp_type == WPAD_EXP_CLASSIC))
+		else if (PAD_ButtonsDown(0)&PAD_BUTTON_UP)
 		{
 			input = D_UP;
 		}
-		else if ((wpaddown & WPAD_BUTTON_DOWN || PAD_ButtonsDown(0)&PAD_BUTTON_DOWN) || (wpaddown & WPAD_CLASSIC_BUTTON_DOWN && exp_type == WPAD_EXP_CLASSIC))
+		else if (PAD_ButtonsDown(0)&PAD_BUTTON_DOWN)
 		{
 			input = D_DOWN;
 		}
-		else if ((wpaddown & WPAD_BUTTON_LEFT || PAD_ButtonsDown(0)&PAD_BUTTON_LEFT) || (wpaddown & WPAD_CLASSIC_BUTTON_LEFT && exp_type == WPAD_EXP_CLASSIC))
+		else if (PAD_ButtonsDown(0)&PAD_BUTTON_LEFT)
 		{
 			input = D_LEFT;
 		}
-		else if ((wpaddown & WPAD_BUTTON_RIGHT || PAD_ButtonsDown(0)&PAD_BUTTON_RIGHT) || (wpaddown & WPAD_CLASSIC_BUTTON_RIGHT && exp_type == WPAD_EXP_CLASSIC))
+		else if (PAD_ButtonsDown(0)&PAD_BUTTON_RIGHT)
 		{
 			input = D_RIGHT;
 		}
-		else if ((wpaddown & WPAD_BUTTON_B || PAD_ButtonsDown(0)&PAD_BUTTON_B) || (wpaddown & WPAD_CLASSIC_BUTTON_B && exp_type == WPAD_EXP_CLASSIC))
+		else if (PAD_ButtonsDown(0)&PAD_BUTTON_B)
 		{
 			input = D_BACK;
 		}
-		else if ((wpaddown & WPAD_BUTTON_PLUS || PAD_ButtonsDown(0)&PAD_BUTTON_START) || (wpaddown & WPAD_CLASSIC_BUTTON_PLUS && exp_type == WPAD_EXP_CLASSIC))
+		else if (PAD_ButtonsDown(0)&PAD_BUTTON_START)
 		{
 			input = D_START;
 		}
-		else if ((wpaddown & WPAD_BUTTON_HOME || PAD_ButtonsDown(0) & PAD_TRIGGER_Z) || (wpaddown & WPAD_CLASSIC_BUTTON_HOME && exp_type == WPAD_EXP_CLASSIC))
+		else if (PAD_ButtonsDown(0) & PAD_TRIGGER_Z)
 		{
 			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
 			SDL_Flip(screen);
 			exit(0);
 		}
 		// Check for IR position on IWAD menu
-		CHAR_YPOS = IWADCHARY;
-
+		//CHAR_YPOS = IWADCHARY;
+		
 		int i;
 		for (i=0; i<numIWADSFound; i++)
 		{
@@ -2116,7 +2139,7 @@ void WADPicker()
 		}
 
 		// Check for IR position on PWAD menu
-		CHAR_YPOS = PWADCHARY;
+		//CHAR_YPOS = PWADCHARY;
 
 		for (x=0; ((x < numPWADSFound) && (x < PWADMAXPAGE)); x++)
 		{
@@ -2221,9 +2244,10 @@ void WADPicker()
 			PWADSTARTNUM += PWADMAXPAGE;
 			joyWait = SDL_GetTicks() + 20;
 		}
-		if ((wpaddown & WPAD_BUTTON_PLUS || PAD_ButtonsDown(0) & PAD_BUTTON_START || wpaddown & WPAD_CLASSIC_BUTTON_PLUS)
-			&& SDL_GetTicks() > joyWait && selectedIWAD != -1)
+		if ((PAD_ButtonsDown(0) & PAD_BUTTON_START) && (SDL_GetTicks() > joyWait && selectedIWAD != -1))
+		{
 			done = true;
+		}
 		if (HWButton != -1)
 		{
 			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
@@ -2232,16 +2256,16 @@ void WADPicker()
 		}
 		SDL_Flip(screen);
 	}
-	if(sd)
-	{
-		selectedIWADFile = malloc(strlen("sd:/apps/wiidoom/data/") + strlen(foundIwads[selectedIWAD])+4);
-		sprintf(selectedIWADFile, "%s%s.wad", "sd:/apps/wiidoom/data/", foundIwads[selectedIWAD]);
-	}
-	else if(usb)
+	//if(sd)
+	//{
+	selectedIWADFile = malloc(strlen("sdb:/gcdoom/data/") + strlen(foundIwads[selectedIWAD])+4);
+	sprintf(selectedIWADFile, "%s%s.wad", "sdb:/gcdoom/data/", foundIwads[selectedIWAD]);
+	//}
+	/*else if(usb)
 	{
 		selectedIWADFile = malloc(strlen("usb:/apps/wiidoom/data/") + strlen(foundIwads[selectedIWAD])+4);
 		sprintf(selectedIWADFile, "%s%s.wad", "usb:/apps/wiidoom/data/", foundIwads[selectedIWAD]);
-	}
+	}*/
 	// Load PWADs
 	for (selectedPWADIndex = 0; selectedPWADIndex < MAX_PWADS; selectedPWADIndex++)
 	{
@@ -2249,10 +2273,10 @@ void WADPicker()
 		{
 			char* p = NULL;
 
-			if(sd)
-				p = "sd:/apps/wiidoom/data/pwads/";
-			else if(usb)
-				p = "usb:/apps/wiidoom/data/pwads/";
+			//if(sd)
+			p = "sdb:/apps/wiidoom/data/pwads/";
+			//else if(usb)
+			//	p = "usb:/apps/wiidoom/data/pwads/";
 
 
 			char* f = malloc(strlen(p) + strlen(foundPwads[selectedPWADs[selectedPWADIndex]]) + 4);
@@ -2297,8 +2321,8 @@ void WADPicker()
 
 void D_DoomMain(void)
 {
-	// Init wii stuff
-	wii_init();
+	// Init gamecube stuff
+	gc_init();
 
 	// Load WAD Picker
 	WADPicker();
@@ -2308,20 +2332,20 @@ void D_DoomMain(void)
 	D_DoomLoop ();  // never returns
 }
 
-void wii_init()
+void gc_init()
 {
 	int res;
 	u32 type;
 	bool found = false;
 	FILE *fp;
-	MOUSE_Init();
-	// Init SD(HC)
-	fatUnmount("sd:/");
-	__io_wiisd.shutdown();
-	fatMountSimple("sd", &__io_wiisd);
+	//MOUSE_Init();
+	// Init SDB
+	fatUnmount("sdb:/");
+	__io_gcsdb.shutdown();
+	fatMountSimple("sdb", &__io_gcsdb);
 
 	//Init USB
-	fatUnmount("usb:/");
+	/* fatUnmount("usb:/");
 	bool isMounted = fatMountSimple("usb", &__io_usbstorage);
 	if(!isMounted)
 	{
@@ -2343,27 +2367,28 @@ void wii_init()
 			}
 		}
 	}
+	*/
 	PAD_Init();
-	KEYBOARD_Init(NULL);
-	fatMountSimple("sd", &__io_wiisd);
-	fatMountSimple("usb", &__io_usbstorage);
-	fp = fopen("usb:/apps/wiidoom/data/prboom.cfg","rb");
-	if (fp)
-		usb = true;
-	else
-	{
-		fclose(fp);
-		fp = fopen("sd:/apps/wiidoom/data/prboom.cfg","rb");
+	//KEYBOARD_Init(NULL);
+	fatMountSimple("sdb", &__io_gcsdb);
+	//fatMountSimple("usb", &__io_usbstorage);
+	//fp = fopen("usb:/apps/wiidoom/data/prboom.cfg","rb");
+	//if (fp)
+	//	usb = true;
+	//else
+	//{
+	//	fclose(fp);
+	fp = fopen("sdb:/apps/wiidoom/data/prboom.cfg","rb");
 		sd = true;
-	}
+	//}
 	fclose(fp);
 	// Init the wiimotes
-	WPAD_Init();
-	WPAD_SetDataFormat(0, WPAD_FMT_BTNS_ACC_IR);
-	WPAD_SetVRes(WPAD_CHAN_ALL, SCREENWIDTH, SCREENHEIGHT);
-	SYS_SetResetCallback(WiiResetPressed);
-	SYS_SetPowerCallback(WiiPowerPressed);
-	WPAD_SetPowerButtonCallback(WiimotePowerPressed);
+	//WPAD_Init();
+	//WPAD_SetDataFormat(0, WPAD_FMT_BTNS_ACC_IR);
+	//WPAD_SetVRes(WPAD_CHAN_ALL, SCREENWIDTH, SCREENHEIGHT);
+	//SYS_SetResetCallback(WiiResetPressed);
+	//SYS_SetPowerCallback(WiiPowerPressed);
+	//WPAD_SetPowerButtonCallback(WiimotePowerPressed);
 }
 
 //

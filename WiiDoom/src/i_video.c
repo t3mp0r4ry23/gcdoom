@@ -44,6 +44,21 @@
 #endif
 
 #include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
+#include "SDL/SDL.h"
 
 #include "m_argv.h"
 #include "doomstat.h"
@@ -61,7 +76,8 @@
 #include "w_wad.h"
 #include "st_stuff.h"
 #include "lprintf.h"
-#include <wiiuse/wpad.h>
+//#include <wiiuse/wpad.h>
+#include <ogc/pad.h>
 #include <math.h>
 
 int gl_colorbuffer_bits=16;

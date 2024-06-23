@@ -7,7 +7,7 @@
 #define HAVE_CONFIG_H 1
 
 /* Define to be the path where Doom WADs are stored */
-#define DOOMWADDIR "sd:/prboom"
+#define DOOMWADDIR "sdb:/gcdoom"
 
 /* Define if you are building with OpenGL support */
 /* #undef GL_DOOM */
@@ -110,22 +110,22 @@
 /* #undef INSTRUMENTED */
 
 /* Name of package */
-#define PACKAGE "wiidoom"
+#define PACKAGE "gcdoom"
 
 /* Define to the address where bug reports for this package should be sent. */
 #define PACKAGE_BUGREPORT ""
 
 /* Define to the full name of this package. */
-#define PACKAGE_NAME "wiidoom"
+#define PACKAGE_NAME "gcdoom"
 
 /* Define to the full name and version of this package. */
-#define PACKAGE_STRING "wiidoom 0.4.2"
+#define PACKAGE_STRING "gcdoom 0.0.1, based on wiidoom 0.4.2"
 
 /* Define to the one symbol short name of this package. */
-#define PACKAGE_TARNAME "wiidoom"
+#define PACKAGE_TARNAME "gcdoom"
 
 /* Define to the version of this package. */
-#define PACKAGE_VERSION "0.4.2"
+#define PACKAGE_VERSION "0.0.1"
 
 /* Set to the attribute to apply to struct definitions to make them packed */
 #define PACKEDATTR __attribute__((packed))
@@ -158,7 +158,7 @@
 /*#define USE_SDL_NET 0 */
 
 /* Version number of package */
-#define VERSION "0.4.2"
+#define VERSION "0.0.1"
 
 /* Define if using the dmalloc debugging malloc package */
 /* #undef WITH_DMALLOC */

@@ -36,7 +36,8 @@
 
 #include "doomtype.h"
 #include "v_video.h"
-#include <wiiuse/wpad.h>
+//#include <wiiuse/wpad.h>
+#include <ogc/pad.h>
 
 #ifdef __GNUG__
 #pragma interface
@@ -82,5 +83,6 @@ extern int desired_fullscreen; //e6y
 
 #endif
 
-void Wiimote_Callback(int chan, const WPADData *data);
-void WiiMote_Check();
+//void Wiimote_Callback(int chan, const WPADData *data);
+//void WiiMote_Check();
+

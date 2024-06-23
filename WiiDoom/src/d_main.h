@@ -37,7 +37,7 @@
 #include "d_event.h"
 #include "w_wad.h"
 
-#include <wiiuse/wiiuse.h>
+//#include <wiiuse/wiiuse.h>
 
 #ifdef __GNUG__
 #pragma interface
@@ -86,5 +86,5 @@ extern const char *wad_files[MAXLOADFILES], *deh_files[MAXLOADFILES];
 
 
 // Wii vars
-wiimote **wiimotes;
-void wii_init();
+//wiimote **wiimotes;
+void gc_init();
