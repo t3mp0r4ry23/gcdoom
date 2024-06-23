@@ -199,7 +199,7 @@ extern int joybfire;
 extern int joybstrafe;
 extern int joybuse;
 extern int joybspeed;
-extern int ir_crosshair;
+//extern int ir_crosshair;
 
 int mapcolor_me;    // cph
 
@@ -2930,8 +2930,8 @@ setup_menu_t gen_settings1[] = { // General Settings screen1
   {"Uncapped Framerate", S_YESNO, m_null, G_X,
   G_YA + general_uncapped*8, {"uncapped_framerate"}},
 
-  {"IR Crosshair", S_YESNO, m_null, G_X,
-   G_YA + general_ir*8, {"ir_crosshair"}},
+  //{"IR Crosshair", S_YESNO, m_null, G_X,
+  // G_YA + general_ir*8, {"ir_crosshair"}},
 
 
 #ifdef GL_DOOM

@@ -166,7 +166,7 @@ extern int gl_sprite_offset;
 
 extern int realtic_clock_rate;         // killough 4/13/98: adjustable timer
 extern int tran_filter_pct;            // killough 2/21/98
-extern int ir_crosshair;
+//extern int ir_crosshair;
 
 extern int screenblocks;
 extern int showMessages;
@@ -265,7 +265,7 @@ default_t defaults[] =
    def_bool,ss_none}, // enables message display
   {"autorun",{&autorun},{1},0,1,  // killough 3/6/98: preserve autorun across games
    def_bool,ss_none},
-  {"ir_crosshair", {&ir_crosshair}, {0},0,1, def_bool,ss_none},
+  //{"ir_crosshair", {&ir_crosshair}, {0},0,1, def_bool,ss_none},
 
   {"Compatibility settings",{NULL},{0},UL,UL,def_none,ss_none},
   {"comp_zombie",{&default_comp[comp_zombie]},{0},0,1,def_bool,ss_comp,&comp[comp_zombie]},

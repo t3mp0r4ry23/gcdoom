@@ -346,7 +346,7 @@ uid_t stored_euid = -1;
 #endif
 
 //int main(int argc, const char * const * argv)
-int main(int argc, char **argv)
+int I_Main(int argc, char **argv)
 {
   GXRModeObj *rmode = NULL;
   void *xfb = NULL;

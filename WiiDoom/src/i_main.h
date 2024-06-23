@@ -42,3 +42,5 @@ void I_SafeExit(int rc);
 extern int (*I_GetTime)(void);
 
 #endif
+
+int I_Main(int argc, char ** argv);
