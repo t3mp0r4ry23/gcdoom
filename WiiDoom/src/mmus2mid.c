@@ -760,7 +760,7 @@ int MIDIToMidi(MIDI *mididata,UBYTE **mid,int *midlen)
 //
 // Passed the command line arguments, returns 0 if successful
 //
-int main(int argc,char **argv)
+int notMain(int argc,char **argv) //just in case
 {
   FILE *musst,*midst;
   char musfile[FILENAME_MAX],midfile[FILENAME_MAX];
