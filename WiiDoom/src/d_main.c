@@ -858,7 +858,7 @@ static void IdentifyVersion (void)
 	char *iwad;
 	char tempPath[80];
 	// set save path to -save parm or current dir
-	char tempIWADName[80];
+	char tempIWADName[30];
 	//if (usb)
 	//	mkdir("usb:/apps/wiidoom/data/saves",0);
 	//else if (sd)
@@ -1779,12 +1779,13 @@ void WADPicker()
 	int i;
 	int selectedPWADs[MAX_PWADS];
 	int selectedPWADIndex;
-	SDL_Window *window = SDL_CreateWindow("GCDoom", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 640, 480, SDL_WINDOW_SHOWN);
+	SDL_Window *window;
 	SDL_Event Event;
 	for (selectedPWADIndex = 0; selectedPWADIndex < MAX_PWADS; selectedPWADIndex++)
 		selectedPWADs[selectedPWADIndex] = -1;
 	SDL_Surface *screen;
-	screen = SDL_SetVideoMode(640, 480, 16, SDL_DOUBLEBUF);
+	window = SDL_CreateWindow("GCDoom", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_SHOWN);
+	screen = SDL_GetWindowSurface(window);
 	FILE * fp2;
 	TTF_Init();
 	TTF_Font *doomfnt24;
@@ -1959,7 +1960,7 @@ void WADPicker()
 				S_StartSound(NULL, sfx_swtchn);
 				exit(0);
 				SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
-				//SDL_BlitSurface(screen);
+				SDL_UpdateWindowSurface(window);
 			default:
 				break;
 			}
@@ -2010,7 +2011,7 @@ void WADPicker()
 		else
 			STARTALPHA-=5;
 
-		SDL_SetAlpha(startButton, SDL_SRCALPHA, STARTALPHA);
+		SDL_SetSurfaceAlphaMod(startButton, STARTALPHA);
 
 		if (selectedIWAD != -1)
 		{
@@ -2116,7 +2117,7 @@ void WADPicker()
 		else if (PAD_ButtonsDown(0) & PAD_TRIGGER_Z)
 		{
 			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
-			SDL_Flip(screen);
+			SDL_UpdateWindowSurface(window);
 			exit(0);
 		}
 		// Check for IR position on IWAD menu
@@ -2249,10 +2250,10 @@ void WADPicker()
 		if (HWButton != -1)
 		{
 			SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
-			SDL_Flip(screen);
+			SDL_UpdateWindowSurface(window);
 			SYS_ResetSystem(HWButton,0,0);
 		}
-		SDL_Flip(screen);
+		SDL_UpdateWindowSurface(window);
 	}
 	//if(sd)
 	//{
@@ -2297,7 +2298,7 @@ void WADPicker()
 	};
 	SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 0, 0, 0));
 	SDL_BlitSurface(loadingSurface,NULL,screen,&loadingRect );
-	SDL_Flip(screen);
+	SDL_UpdateWindowSurface(window);
 
 	//if (strncmp(foundIwads[selectedIWAD], "doom1", 5) == 0)
 	//	return;

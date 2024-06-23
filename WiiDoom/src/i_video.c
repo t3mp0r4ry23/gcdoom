@@ -96,7 +96,7 @@ extern int chosenController;
 //  Translates the key currently in key
 //
 
-static int I_TranslateKey(SDL_keysym* key)
+static int I_TranslateKey(SDL_Keysym* key)
 {
   int rc = 0;
 
@@ -130,30 +130,28 @@ static int I_TranslateKey(SDL_keysym* key)
   case SDLK_PAUSE:  rc = KEYD_PAUSE;  break;
   case SDLK_EQUALS: rc = KEYD_EQUALS; break;
   case SDLK_MINUS:  rc = KEYD_MINUS;  break;
-  case SDLK_KP0:  rc = KEYD_KEYPAD0;  break;
-  case SDLK_KP1:  rc = KEYD_KEYPAD1;  break;
-  case SDLK_KP2:  rc = KEYD_KEYPAD2;  break;
-  case SDLK_KP3:  rc = KEYD_KEYPAD3;  break;
-  case SDLK_KP4:  rc = KEYD_KEYPAD4;  break;
-  case SDLK_KP5:  rc = KEYD_KEYPAD5;  break;
-  case SDLK_KP6:  rc = KEYD_KEYPAD6;  break;
-  case SDLK_KP7:  rc = KEYD_KEYPAD7;  break;
-  case SDLK_KP8:  rc = KEYD_KEYPAD8;  break;
-  case SDLK_KP9:  rc = KEYD_KEYPAD9;  break;
-  case SDLK_KP_PLUS:  rc = KEYD_KEYPADPLUS; break;
-  case SDLK_KP_MINUS: rc = KEYD_KEYPADMINUS;  break;
-  case SDLK_KP_DIVIDE:  rc = KEYD_KEYPADDIVIDE; break;
-  case SDLK_KP_MULTIPLY: rc = KEYD_KEYPADMULTIPLY; break;
-  case SDLK_KP_ENTER: rc = KEYD_KEYPADENTER;  break;
-  case SDLK_KP_PERIOD:  rc = KEYD_KEYPADPERIOD; break;
+  case SDLK_KP_0:  rc = KEYD_KEYPAD0;  break;
+  case SDLK_KP_1:  rc = KEYD_KEYPAD1;  break;
+  case SDLK_KP_2:  rc = KEYD_KEYPAD2;  break;
+  case SDLK_KP_3:  rc = KEYD_KEYPAD3;  break;
+  case SDLK_KP_4:  rc = KEYD_KEYPAD4;  break;
+  case SDLK_KP_5:  rc = KEYD_KEYPAD5;  break;
+  case SDLK_KP_6:  rc = KEYD_KEYPAD6;  break;
+  case SDLK_KP_7:  rc = KEYD_KEYPAD7;  break;
+  case SDLK_KP_8:  rc = KEYD_KEYPAD8;  break;
+  case SDLK_KP_9:  rc = KEYD_KEYPAD9;  break;
+  case SDLK_KP__PLUS:  rc = KEYD_KEYPADPLUS; break;
+  case SDLK_KP__MINUS: rc = KEYD_KEYPADMINUS;  break;
+  case SDLK_KP__DIVIDE:  rc = KEYD_KEYPADDIVIDE; break;
+  case SDLK_KP__MULTIPLY: rc = KEYD_KEYPADMULTIPLY; break;
+  case SDLK_KP__ENTER: rc = KEYD_KEYPADENTER;  break;
+  case SDLK_KP__PERIOD:  rc = KEYD_KEYPADPERIOD; break;
   case SDLK_LSHIFT:
   case SDLK_RSHIFT: rc = KEYD_RSHIFT; break;
   case SDLK_LCTRL:
   case SDLK_RCTRL:  rc = KEYD_RCTRL;  break;
   case SDLK_LALT:
-  case SDLK_LMETA:
-  case SDLK_RALT:
-  case SDLK_RMETA:  rc = KEYD_RALT;   break;
+  case SDLK_RALT:  rc = KEYD_RALT;   break;
   case SDLK_CAPSLOCK: rc = KEYD_CAPSLOCK; break;
   default:    rc = key->sym;    break;
   }
@@ -340,7 +338,7 @@ static void I_UploadNewPalette(int pal)
 
   // store the colors to the current display
   // SDL_SetColors(SDL_GetVideoSurface(), colours+256*pal, 0, 256);
-  SDL_SetPalette(SDL_GetVideoSurface(),SDL_PHYSPAL,colours+256*pal, 0, 256);
+  SDL_SetPaletteColors(SDL_GetWindowSurface(window)->format->pallete, colours+256*pal, 0, 256);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -533,7 +531,7 @@ void I_CalculateRes(unsigned int width, unsigned int height)
   if (V_GetMode() == VID_MODEGL) {
     if ( desired_fullscreen )
     {
-      I_ClosestResolution(&width, &height, SDL_OPENGL|SDL_FULLSCREEN);
+      I_ClosestResolution(&width, &height, SDL_WINDOW_OPENGL|SDL_WINDOW_FULLSCREEN);
     }
     SCREENWIDTH = width;
     SCREENHEIGHT = height;
@@ -594,7 +592,7 @@ void I_InitGraphics(void)
     strcpy(titlebuffer,PACKAGE);
     strcat(titlebuffer," ");
     strcat(titlebuffer,VERSION);
-    window = SDL_CreateWindow(&titlebuffer, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_SHOWN | (desired_fullscreen ? SDL_WINDOW_FULLSCREEN);
+    window = SDL_CreateWindow(&titlebuffer, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_SHOWN | (desired_fullscreen ? SDL_WINDOW_FULLSCREEN : NULL));
 
     /* Initialize the input system */
     I_InitInputs();

@@ -60,21 +60,6 @@
 #include "lprintf.h"
 //#ifdef USE_SDL
 #include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL.h>
 //#endif
 
 #include <signal.h>
