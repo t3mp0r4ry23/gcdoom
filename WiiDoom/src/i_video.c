@@ -338,7 +338,7 @@ static void I_UploadNewPalette(int pal)
 
   // store the colors to the current display
   // SDL_SetColors(SDL_GetVideoSurface(), colours+256*pal, 0, 256);
-  SDL_SetPaletteColors(SDL_GetWindowSurface(window)->format->pallete, colours+256*pal, 0, 256);
+  SDL_SetPaletteColors(SDL_GetWindowSurface(window)->format->palette, colours+256*pal, 0, 256);
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -404,7 +404,7 @@ void I_FinishUpdate (void)
     I_UploadNewPalette(newpal);
     newpal = NO_PALETTE_CHANGE;
   }
-  SDL_Flip(screen);
+  SDL_UpdateWindowSurface(window);
 }
 
 //
@@ -592,7 +592,7 @@ void I_InitGraphics(void)
     strcpy(titlebuffer,PACKAGE);
     strcat(titlebuffer," ");
     strcat(titlebuffer,VERSION);
-    window = SDL_CreateWindow(&titlebuffer, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_SHOWN | (desired_fullscreen ? SDL_WINDOW_FULLSCREEN : NULL));
+    window = SDL_CreateWindow(titlebuffer, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREENWIDTH, SCREENHEIGHT, SDL_WINDOW_SHOWN | SDL_WINDOW_FULLSCREEN);
 
     /* Initialize the input system */
     I_InitInputs();
@@ -640,10 +640,10 @@ void I_UpdateVideoMode(void)
 
   //init_flags = SDL_DOUBLEBUF;
 
-  if ( desired_fullscreen )
+  //if ( desired_fullscreen )
     //init_flags |= SDL_FULLSCREEN;
 
-  if (V_GetMode() == VID_MODEGL) {
+  /*if (V_GetMode() == VID_MODEGL) {
     SDL_GL_SetAttribute( SDL_GL_RED_SIZE, 0 );
     SDL_GL_SetAttribute( SDL_GL_GREEN_SIZE, 0 );
     SDL_GL_SetAttribute( SDL_GL_BLUE_SIZE, 0 );
@@ -656,10 +656,10 @@ void I_UpdateVideoMode(void)
     SDL_GL_SetAttribute( SDL_GL_DOUBLEBUFFER, 1 );
     SDL_GL_SetAttribute( SDL_GL_BUFFER_SIZE, gl_colorbuffer_bits );
     SDL_GL_SetAttribute( SDL_GL_DEPTH_SIZE, gl_depthbuffer_bits );
-    screen = SDL_SetVideoMode(SCREENWIDTH, SCREENHEIGHT, gl_colorbuffer_bits, init_flags);
-  } else {
-    screen = SDL_SetVideoMode(SCREENWIDTH, SCREENHEIGHT, 8, init_flags);
-  }
+    screen = SDL_GetWindowSurface(SCREENWIDTH, SCREENHEIGHT, gl_colorbuffer_bits, init_flags);
+  } else {*/
+  screen = SDL_GetWindowSurface(window);
+  //}
 
   if(screen == NULL) {
     I_Error("Couldn't set %dx%d video mode [%s]", SCREENWIDTH, SCREENHEIGHT, SDL_GetError());
